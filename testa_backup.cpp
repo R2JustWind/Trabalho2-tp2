@@ -4,12 +4,14 @@
  * \file testa_backup.cpp
  */
 
-#include "backup.hpp"
 #include <string>
-
+#include <cstdio>
+#include <fstream>
+#include <filesystem>
 #define CATCH_CONFIG_MAIN
 #define CATCH_CONFIG_NO_POSIX_SIGNALS
 #include "catch.hpp"
+#include "backup.hpp"
 
 /**
  * @brief Testa o cenário da coluna 1 da tabela, em que o arquivo de parâmetros não existe.
@@ -19,7 +21,7 @@
  */
 
 TEST_CASE("Arquivo .parm não existe", "[FazBackup]") {
-    std::remove("backup.parm");  //Garante que o arquivo não existe
+    std::remove("backup.parm");  // Garante que o arquivo não existe
 
     std::string source = "HD/origem";
     std::string destination = "PenDrive/destino";

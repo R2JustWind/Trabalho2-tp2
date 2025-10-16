@@ -34,4 +34,5 @@
  */
 int FazBackup(const char* source, const char* destination);
 
-#endif  // BACKUP_HPP_  
+
+#endif  // BACKUP_HPP_
