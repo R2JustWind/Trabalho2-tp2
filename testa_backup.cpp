@@ -15,6 +15,12 @@
 
 namespace fs = std::filesystem;
 
+void CleanUp() {
+    std::remove("backup.parm");
+    fs::remove_all("HD");
+    fs::remove_all("PenDrive");
+}
+
 /**
  * @brief Testa o cenário da coluna 1 da tabela, em que o arquivo de parâmetros não existe.
  * 
@@ -23,15 +29,13 @@ namespace fs = std::filesystem;
  */
 
 TEST_CASE("Arquivo .parm não existe", "[FazBackup]") {
-    std::remove("backup.parm");  // Garante que o arquivo não existe
+    CleanUp();
 
     REQUIRE(FazBackup("PenDrive") == bImpossible);
 }
 
 TEST_CASE("Backup para o pendrive", "[FazBackup]") {
-    std::remove("backup.parm");  // Garante que o arquivo não existe
-    fs::remove_all("HD");
-    fs::remove_all("PenDrive");
+    CleanUp();
 
     fs::create_directories("HD");
     fs::create_directories("PenDrive");
@@ -45,4 +49,6 @@ TEST_CASE("Backup para o pendrive", "[FazBackup]") {
 
     REQUIRE(FazBackup("PenDrive/") == bBackupToPendrive);
     REQUIRE(fs::exists("PenDrive/arquivo1.txt") == true);
+
+    CleanUp();
 }
