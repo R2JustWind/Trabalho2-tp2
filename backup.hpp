@@ -32,7 +32,7 @@
  *        - bDelete (3): Indica que algum arquivo deve ser deletado.
  * 
  */
-int FazBackup(const char* source, const char* destination);
+int FazBackup(const char* pendrive_path);
 
 
 #endif  // BACKUP_HPP_

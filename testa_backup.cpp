@@ -25,10 +25,7 @@ namespace fs = std::filesystem;
 TEST_CASE("Arquivo .parm não existe", "[FazBackup]") {
     std::remove("backup.parm");  // Garante que o arquivo não existe
 
-    std::string source = "HD/origem";
-    std::string destination = "PenDrive/destino";
-
-    REQUIRE(FazBackup(source.c_str(), destination.c_str()) == bImpossible);
+    REQUIRE(FazBackup("PenDrive") == bImpossible);
 }
 
 TEST_CASE("Backup para o pendrive", "[FazBackup]") {
@@ -38,9 +35,14 @@ TEST_CASE("Backup para o pendrive", "[FazBackup]") {
 
     fs::create_directories("HD");
     fs::create_directories("PenDrive");
-    std::ofstream param_file("backup.parm");
-    param_file << "FAZ_BACKUP=TRUE\nhd/arquivo1.txt\n";
+    
     std::ofstream("HD/arquivo1.txt") << "conteudo";
+    std::string source = fs::absolute("HD/arquivo1.txt").string();
 
-    REQUIRE(FazBackup("HD", "PenDrive") == bBackupToPendrive);
+    std::ofstream param_file("backup.parm");
+    param_file << "FAZ_BACKUP=TRUE\n" + source + "\n";
+    param_file.close();
+
+    REQUIRE(FazBackup("PenDrive/") == bBackupToPendrive);
+    REQUIRE(fs::exists("PenDrive/arquivo1.txt") == true);
 }
