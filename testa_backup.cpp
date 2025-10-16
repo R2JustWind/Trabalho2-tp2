@@ -13,6 +13,8 @@
 #include "catch.hpp"
 #include "backup.hpp"
 
+namespace fs = std::filesystem;
+
 /**
  * @brief Testa o cenário da coluna 1 da tabela, em que o arquivo de parâmetros não existe.
  * 
@@ -27,4 +29,18 @@ TEST_CASE("Arquivo .parm não existe", "[FazBackup]") {
     std::string destination = "PenDrive/destino";
 
     REQUIRE(FazBackup(source.c_str(), destination.c_str()) == bImpossible);
+}
+
+TEST_CASE("Backup para o pendrive", "[FazBackup]") {
+    std::remove("backup.parm");  // Garante que o arquivo não existe
+    fs::remove_all("HD");
+    fs::remove_all("PenDrive");
+
+    fs::create_directories("HD");
+    fs::create_directories("PenDrive");
+    std::ofstream param_file("backup.parm");
+    param_file << "FAZ_BACKUP=TRUE\nhd/arquivo1.txt\n";
+    std::ofstream("HD/arquivo1.txt") << "conteudo";
+
+    REQUIRE(FazBackup("HD", "PenDrive") == bBackupToPendrive);
 }
