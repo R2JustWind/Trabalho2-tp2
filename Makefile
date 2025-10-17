@@ -30,7 +30,9 @@ valgrind: $(TARGET)
 	valgrind --leak-check=full --log-file=valgrind.rpt ./$(TARGET)
 
 gcov:
-	$(CXX) $(CXXFLAGS) $(GCOV_FLAGS) $(SOURCES) -o $(TARGET) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $(GCOV_FLAGS) -c backup.cpp -o backup.o
+	$(CXX) $(CXXFLAGS) $(GCOV_FLAGS) -c testa_backup.cpp -o testa_backup.o
+	$(CXX) $(CXXFLAGS) $(GCOV_FLAGS) backup.o testa_backup.o -o $(TARGET) $(LDFLAGS)
 	./$(TARGET)
 	gcov -r backup.cpp
 

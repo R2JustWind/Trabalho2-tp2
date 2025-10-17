@@ -67,10 +67,10 @@ int FazBackup(const char* pendrive_path) {
                     result = bError; // Se a cópia falhar, marque como erro
                 }
             } else if (fs::exists(file) && fs::exists(dest_path)) {
-                uintmax_t hd_size = fs::file_size(file);
-                uintmax_t pendrive_size = fs::file_size(dest_path);
+                auto hd_time = fs::last_write_time(file);
+                auto pendrive_time = fs::last_write_time(dest_path);
 
-                if (hd_size > pendrive_size) {
+                if (hd_time > pendrive_time) {
                     std::error_code ec;
                     fs::copy_file(file, dest_path, fs::copy_options::overwrite_existing, ec);
                     if (!ec) {
