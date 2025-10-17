@@ -58,14 +58,15 @@ int FazBackup(const char* pdPath) {
             fs::path dest_path = fs::path(pdPath) / fs::path(file).filename();
 
             if (fs::exists(file) && !fs::exists(dest_path)) {
-                std::error_code ec;
-                fs::copy_file(file, dest_path, ec);
+                if(config.faz_backup == true) {
+                    std::error_code ec;
+                    fs::copy_file(file, dest_path, ec);
 
-                if (!ec) {
-                    result = bBackupToPendrive;
-                    modified = true;
-                }
-                if (config.faz_backup == false) {
+                    if (!ec) {
+                        result = bBackupToPendrive;
+                        modified = true;
+                    }
+                } else {
                     result = bError;
                 }
             } else if (fs::exists(file) && fs::exists(dest_path)) {
