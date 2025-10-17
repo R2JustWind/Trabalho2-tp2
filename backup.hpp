@@ -15,6 +15,11 @@
 #define bBackupToHD 2
 #define bDelete 3
 
+struct Config {
+    bool faz_backup = false;
+    std::vector<std::string> files;
+};
+
 std::string trim(const std::string& str);
 
 Config ReadParam(std::ifstream& param_file);

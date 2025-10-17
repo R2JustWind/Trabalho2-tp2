@@ -14,11 +14,6 @@
 
 namespace fs = std::filesystem;
 
-struct Config {
-    bool faz_backup = false;
-    std::vector<std::string> files;
-};
-
 std::string trim(const std::string& str) {
     size_t first = str.find_first_not_of(" \t\n\r");
     if (std::string::npos == first) {
