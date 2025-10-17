@@ -93,8 +93,18 @@ int FazBackup(const char* pdPath) {
                     }
                 }
             } else if (!fs::exists(file) && fs::exists(dest_path)) {
-                result = bDoNothing;
-                modified = true;
+                if(config.faz_backup == false) {
+                    std::error_code ec;
+                    fs::copy_file(dest_path, file,
+                    fs::copy_options::overwrite_existing, ec);
+                    if (!ec) {
+                        result = bBackupToHD;
+                        modified = true;
+                    }
+                } else {
+                    result = bDoNothing;
+                    modified = true;
+                }
             }
             if (!modified) {
                 result = bError;
