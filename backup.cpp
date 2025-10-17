@@ -65,6 +65,9 @@ int FazBackup(const char* pdPath) {
                     result = bBackupToPendrive;
                     modified = true;
                 }
+                if (config.faz_backup == false) {
+                    result = bError;
+                }
             } else if (fs::exists(file) && fs::exists(dest_path)) {
                 auto hd_time = fs::last_write_time(file);
                 auto pendrive_time = fs::last_write_time(dest_path);
