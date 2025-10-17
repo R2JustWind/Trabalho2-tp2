@@ -71,28 +71,25 @@ int FazBackup(const char* pdPath) {
                 auto hd_time = fs::last_write_time(file);
                 auto pendrive_time = fs::last_write_time(dest_path);
 
-                if (hd_time > pendrive_time) {
-                    if(config.faz_backup == true) {
-                        std::error_code ec;
-                        fs::copy_file(file, dest_path,
-                        fs::copy_options::overwrite_existing, ec);
-                        if (!ec) {
-                            result = bBackupToPendrive;
-                            modified = true;
-                        }
+                if (hd_time > pendrive_time && config.faz_backup == true) {                   
+                    std::error_code ec;
+                    fs::copy_file(file, dest_path,
+                    fs::copy_options::overwrite_existing, ec);
+                    if (!ec) {
+                        result = bBackupToPendrive;
+                        modified = true;
                     }
                 } else if (pendrive_time == hd_time) {
                     result = bDoNothing;
                     modified = true;
-                } else if (pendrive_time > hd_time) {
-                    if(config.faz_backup == false) {
-                        std::error_code ec;
-                        fs::copy_file(dest_path, file,
-                        fs::copy_options::overwrite_existing, ec);
-                        if (!ec) {
-                            result = bBackupToHD;
-                            modified = true;
-                        }
+                } else if (pendrive_time > hd_time
+                           && config.faz_backup == false) {
+                    std::error_code ec;
+                    fs::copy_file(dest_path, file,
+                    fs::copy_options::overwrite_existing, ec);
+                    if (!ec) {
+                        result = bBackupToHD;
+                        modified = true;
                     }
                 }
             } else if (!fs::exists(file) && fs::exists(dest_path)) {
