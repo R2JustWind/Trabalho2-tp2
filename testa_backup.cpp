@@ -8,6 +8,8 @@
 #include <cstdio>
 #include <fstream>
 #include <filesystem>
+#include <thread>
+#include <chrono>
 #define CATCH_CONFIG_MAIN
 #define CATCH_CONFIG_NO_POSIX_SIGNALS
 #include "catch.hpp"
@@ -53,16 +55,17 @@ TEST_CASE("Backup para o pendrive", "[FazBackup]") {
     CleanUp();
 }
 
-TEST_CASE("Ambos possuem o arquivo mas o HD tem mais data", "[FazBackup]") {
+TEST_CASE("Ambos possuem o arquivo mas o HD é mais recente", "[FazBackup]") {
     CleanUp();
 
     fs::create_directories("HD");
     fs::create_directories("PenDrive");
-    
-    std::ofstream("HD/arquivo1.txt") << "conteudo139123";
-    std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
 
     std::ofstream("PenDrive/arquivo1.txt") << "conteudo";
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    std::ofstream("HD/arquivo1.txt") << "conteudo";
+    std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
 
     std::ofstream param_file("backup.parm");
     param_file << "FAZ_BACKUP=TRUE\n" + source_hd + "\n";
@@ -79,10 +82,10 @@ TEST_CASE("Ambos possuem o arquivo de mesmo tamanho", "[FazBackup]") {
     fs::create_directories("HD");
     fs::create_directories("PenDrive");
     
-    std::ofstream("HD/arquivo1.txt") << "arquivos identicos";
+    std::ofstream("HD/arquivo1.txt") << "teste";
     std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
 
-    std::ofstream("PenDrive/arquivo1.txt") << "arquivos identicos";
+    std::ofstream("PenDrive/arquivo1.txt") << "teste";
 
     std::ofstream param_file("backup.parm");
     param_file << "FAZ_BACKUP=TRUE\n" + source_hd + "\n";
