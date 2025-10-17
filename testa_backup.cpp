@@ -136,3 +136,22 @@ TEST_CASE("Nenhum dos 2 possui o arquivo", "[FazBackup]") {
 
     CleanUp();
 }
+
+TEST_CASE("Apenas o pendrive possui o arquivo", "[FazBackup]") {
+    CleanUp();
+
+    fs::create_directories("HD");
+    fs::create_directories("PenDrive");
+
+    std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
+
+    std::ofstream("PenDrive/arquivo1.txt") << "dados no pendrive";
+
+    std::ofstream param_file("backup.parm");
+    param_file << "FAZ_BACKUP=TRUE\n" + source_hd + "\n";
+    param_file.close();
+
+    REQUIRE(FazBackup("PenDrive/") == bDoNothing);
+
+    CleanUp();
+}
