@@ -231,3 +231,18 @@ TEST_CASE("Restauração: O arquivo do pendrive é mais recente", "[FazBackup]")
 
     REQUIRE(FazBackup("PenDrive/") == bBackupToHD);
 }
+
+TEST_CASE("Restauração: Nenhum dos 2 possui o arquivo", "[FazBackup]") {
+    CleanUp();
+
+    fs::create_directories("HD");
+    fs::create_directories("PenDrive");
+
+    std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
+
+    std::ofstream param_file("backup.parm");
+    param_file << "FAZ_BACKUP=FALSE\n" + source_hd + "\n";
+    param_file.close();
+
+    REQUIRE(FazBackup("PenDrive/") == bError);
+}
