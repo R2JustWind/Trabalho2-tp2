@@ -74,6 +74,10 @@ int FazBackup(const char* pdPath) {
                 auto pendrive_time = fs::last_write_time(dest_path);
 
                 if (hd_time > pendrive_time) {
+                    if(config.faz_backup == false) {
+                        result = bError;
+                        continue;
+                    }
                     std::error_code ec;
                     fs::copy_file(file, dest_path,
                     fs::copy_options::overwrite_existing, ec);
