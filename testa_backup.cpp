@@ -100,7 +100,7 @@ TEST_CASE("Ambos possuem o arquivo atualizado", "[FazBackup]") {
     CleanUp();
 }
 
-TEST_CASE("Ambos possuem o arquivo mas o de PenDrive é maior", "[FazBackup]") {
+TEST_CASE("Ambos possuem o arquivo mas o de PenDrive é recente", "[FazBackup]") {
     CleanUp();
 
     fs::create_directories("HD");
@@ -154,4 +154,20 @@ TEST_CASE("Apenas o pendrive possui o arquivo", "[FazBackup]") {
     REQUIRE(FazBackup("PenDrive/") == bDoNothing);
 
     CleanUp();
+}
+
+TEST_CASE("Restauração: apenas o HD possui o arquivo", "[FazBackup]") {
+    CleanUp();
+
+    fs::create_directories("HD");
+    fs::create_directories("PenDrive");
+
+    std::ofstream("HD/arquivo1.txt") << "dados do HD";
+    std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
+
+    std::ofstream param_file("backup.parm");
+    param_file << "FAZ_BACKUP=FALSE\n" + source_hd + "\n";
+    param_file.close();
+
+    REQUIRE(FazBackup("PenDrive/") == bError);
 }
