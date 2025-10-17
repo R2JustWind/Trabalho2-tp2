@@ -41,30 +41,29 @@ Config ReadParam(std::ifstream& param_file) {
     return config;
 }
 
-int FazBackup(const char* pendrive_path) {
+int FazBackup(const char* pdPath) {
     // Assertiva de entrada
-    assert(pendrive_path != nullptr && "Diretório destination não pode ser nulo");
+    assert(pdPath != nullptr);
 
     std::ifstream param_file("backup.parm");
-    int result = bDoNothing; // Iniciar com um padrão seguro
+    int result = bDoNothing;   // Iniciar com um padrão seguro
 
     if (!param_file.is_open()) {
-        result = bImpossible;  
-    } else { 
+        result = bImpossible;
+    } else {
         Config config = ReadParam(param_file);
 
         for (const auto& file : config.files) {
-            fs::path dest_path = fs::path(pendrive_path) / fs::path(file).filename();
+            fs::path dest_path = fs::path(pdPath) / fs::path(file).filename();
 
             if (fs::exists(file) && !fs::exists(dest_path)) {
                 std::error_code ec;
-                fs::copy_file(file, dest_path, ec); // Usar copy_file é mais explícito
-                
-                // CORREÇÃO: O 'return -1;' foi removido.
-                if (!ec) { // Se não houve erro
+                fs::copy_file(file, dest_path, ec);
+
+                if (!ec) {
                     result = bBackupToPendrive;
                 } else {
-                    result = bError; // Se a cópia falhar, marque como erro
+                    result = bError;
                 }
             } else if (fs::exists(file) && fs::exists(dest_path)) {
                 auto hd_time = fs::last_write_time(file);
@@ -72,7 +71,8 @@ int FazBackup(const char* pendrive_path) {
 
                 if (hd_time > pendrive_time) {
                     std::error_code ec;
-                    fs::copy_file(file, dest_path, fs::copy_options::overwrite_existing, ec);
+                    fs::copy_file(file, dest_path,
+                    fs::copy_options::overwrite_existing, ec);
                     if (!ec) {
                         result = bBackupToPendrive;
                     } else {
@@ -84,7 +84,7 @@ int FazBackup(const char* pendrive_path) {
     }
 
 
-    //Assertiva de saída;
+    // Assertiva de saída;
     assert(result >= bError && result <= bDelete);
     return result;
 }

@@ -30,8 +30,7 @@ Config ReadParam(std::ifstream& param_file);
  * Esta função verifica a existência do arquivo de parâmetros "backup.parm" e a condição dos diretórios,
  * determninando a ação que será tomada.
  * 
- * @param source Caminho do diretório fonte (HD).
- * @param destination Caminho do diretório de destino (pendrive).
+ * @param pdPath O caminho do diretório de destino (pendrive).
  * @return Um código inteiro representando o resultado da operação:
  *        - bImpossible (-1): Indica que qualquer ação é impossível (ex: arquivo de parâmetros não encontrado).
  *        - bError (-2): Indica que ocorreu um erro durante a operação.
@@ -41,7 +40,7 @@ Config ReadParam(std::ifstream& param_file);
  *        - bDelete (3): Indica que algum arquivo deve ser deletado.
  * 
  */
-int FazBackup(const char* pendrive_path);
+int FazBackup(const char* pdPath);
 
 
 #endif  // BACKUP_HPP_

@@ -41,7 +41,7 @@ TEST_CASE("Backup para o pendrive", "[FazBackup]") {
 
     fs::create_directories("HD");
     fs::create_directories("PenDrive");
-    
+
     std::ofstream("HD/arquivo1.txt") << "conteudo";
     std::string source = fs::absolute("HD/arquivo1.txt").string();
 
@@ -81,7 +81,7 @@ TEST_CASE("Ambos possuem o arquivo mas o HD é mais recente", "[FazBackup]") {
 
 //     fs::create_directories("HD");
 //     fs::create_directories("PenDrive");
-    
+
 //     std::ofstream("HD/arquivo1.txt") << "teste";
 //     std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
 
