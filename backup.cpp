@@ -82,6 +82,8 @@ int FazBackup(const char* pdPath) {
                 } else {
                     result = bError;
                 }
+            } else if(!fs::exists(file) && !fs::exists(dest_path)) {
+                result = bError;
             }
         }
     }
