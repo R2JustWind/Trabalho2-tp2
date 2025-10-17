@@ -12,8 +12,8 @@
 #include <chrono>
 #define CATCH_CONFIG_MAIN
 #define CATCH_CONFIG_NO_POSIX_SIGNALS
-#include "catch.hpp"
-#include "backup.hpp"
+#include "/Users/arthur/Backup_tdd/catch.hpp"
+#include "/Users/arthur/Backup_tdd/backup.hpp"
 
 namespace fs = std::filesystem;
 
@@ -100,7 +100,7 @@ TEST_CASE("Ambos possuem o arquivo atualizado", "[FazBackup]") {
     CleanUp();
 }
 
-TEST_CASE("Ambos possuem o arquivo mas o de PenDrive é recente", "[FazBackup]") {
+TEST_CASE("O arquivo do PenDrive é mais recente", "[FazBackup]") {
     CleanUp();
 
     fs::create_directories("HD");

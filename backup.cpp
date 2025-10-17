@@ -10,20 +10,28 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "backup.hpp"
+#include "/Users/arthur/Backup_tdd/backup.hpp"
 
 namespace fs = std::filesystem;
 
 std::string trim(const std::string& str) {
+    // Assertiva de entrada
+    assert(!str.empty());
     size_t first = str.find_first_not_of(" \t\n\r");
     if (std::string::npos == first) {
         return str;
     }
     size_t last = str.find_last_not_of(" \t\n\r");
+
+    // Assertiva de saída
+    assert(last >= first);
     return str.substr(first, (last - first + 1));
 }
 
 Config ReadParam(std::ifstream& param_file) {
+    // Assertiva de entrada
+    assert(param_file.is_open());
+
     Config config;
     std::string line;
     while (std::getline(param_file, line)) {
@@ -38,6 +46,8 @@ Config ReadParam(std::ifstream& param_file) {
             config.files.push_back(trimmed_line);
         }
     }
+    // Assertiva de saída
+    assert(!config.files.empty());
     return config;
 }
 
@@ -58,7 +68,7 @@ int FazBackup(const char* pdPath) {
             fs::path dest_path = fs::path(pdPath) / fs::path(file).filename();
 
             if (fs::exists(file) && !fs::exists(dest_path)) {
-                if(config.faz_backup == true) {
+                if (config.faz_backup == true) {
                     std::error_code ec;
                     fs::copy_file(file, dest_path, ec);
 
@@ -71,7 +81,8 @@ int FazBackup(const char* pdPath) {
                 auto hd_time = fs::last_write_time(file);
                 auto pendrive_time = fs::last_write_time(dest_path);
 
-                if (hd_time > pendrive_time && config.faz_backup == true) {                   
+                if (hd_time > pendrive_time
+                    && config.faz_backup == true) {
                     std::error_code ec;
                     fs::copy_file(file, dest_path,
                     fs::copy_options::overwrite_existing, ec);
@@ -93,7 +104,7 @@ int FazBackup(const char* pdPath) {
                     }
                 }
             } else if (!fs::exists(file) && fs::exists(dest_path)) {
-                if(config.faz_backup == false) {
+                if (config.faz_backup == false) {
                     std::error_code ec;
                     fs::copy_file(dest_path, file,
                     fs::copy_options::overwrite_existing, ec);
