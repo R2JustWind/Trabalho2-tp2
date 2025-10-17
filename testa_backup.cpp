@@ -191,3 +191,24 @@ TEST_CASE("Restauração: O arquivo do HD é mais recente", "[FazBackup]") {
 
     REQUIRE(FazBackup("PenDrive/") == bError);
 }
+
+TEST_CASE("Restauração: Ambos possuem o arquivo atualizado", "[FazBackup]") {
+    CleanUp();
+
+    fs::create_directories("HD");
+    fs::create_directories("PenDrive");
+
+    std::ofstream("HD/arquivo1.txt") << "conteúdo do arquivo";
+    auto timestamp_original = fs::last_write_time("HD/arquivo1.txt");
+    std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
+
+    std::ofstream("PenDrive/arquivo1.txt") << "conteúdo do outro arquivo";
+    fs::last_write_time("PenDrive/arquivo1.txt", timestamp_original);
+    fs::last_write_time("HD/arquivo1.txt", timestamp_original);
+
+    std::ofstream param_file("backup.parm");
+    param_file << "FAZ_BACKUP=FALSE\n" + source_hd + "\n";
+    param_file.close();
+
+    REQUIRE(FazBackup("PenDrive/") == bDoNothing);
+}
