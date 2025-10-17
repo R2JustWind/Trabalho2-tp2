@@ -105,7 +105,7 @@ TEST_CASE("Ambos possuem o arquivo mas o de PenDrive é maior", "[FazBackup]") {
 
     fs::create_directories("HD");
     fs::create_directories("PenDrive");
-    
+
     std::ofstream("HD/arquivo1.txt") << "dados menores";
     std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
 
@@ -116,7 +116,7 @@ TEST_CASE("Ambos possuem o arquivo mas o de PenDrive é maior", "[FazBackup]") {
     param_file.close();
 
     REQUIRE(FazBackup("PenDrive/") == bError);
-    
+
     CleanUp();
 }
 

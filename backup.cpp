@@ -47,6 +47,7 @@ int FazBackup(const char* pdPath) {
 
     std::ifstream param_file("backup.parm");
     int result = bDoNothing;   // Iniciar com um padrão seguro
+    bool modified = false;
 
     if (!param_file.is_open()) {
         result = bImpossible;
@@ -62,8 +63,7 @@ int FazBackup(const char* pdPath) {
 
                 if (!ec) {
                     result = bBackupToPendrive;
-                } else {
-                    result = bError;
+                    modified = true;
                 }
             } else if (fs::exists(file) && fs::exists(dest_path)) {
                 auto hd_time = fs::last_write_time(file);
@@ -71,18 +71,18 @@ int FazBackup(const char* pdPath) {
 
                 if (hd_time > pendrive_time) {
                     std::error_code ec;
-                    fs::copy_file(file, dest_path, fs::copy_options::overwrite_existing, ec);
+                    fs::copy_file(file, dest_path,
+                    fs::copy_options::overwrite_existing, ec);
                     if (!ec) {
                         result = bBackupToPendrive;
-                    } else {
-                        result = bError;
+                        modified = true;
                     }
                 } else if (pendrive_time == hd_time) {
                     result = bDoNothing;
-                } else {
-                    result = bError;
+                    modified = true;
                 }
-            } else if(!fs::exists(file) && !fs::exists(dest_path)) {
+            }
+            if (!modified) {
                 result = bError;
             }
         }
