@@ -87,6 +87,7 @@ TEST_CASE("Ambos possuem o arquivo atualizado", "[FazBackup]") {
 
     std::ofstream("PenDrive/arquivo1.txt") << "outro conteúdo do arquivo";
     fs::last_write_time("PenDrive/arquivo1.txt", timestamp_original);
+    fs::last_write_time("HD/arquivo1.txt", timestamp_original);
 
     std::string source_hd = fs::absolute("HD/arquivo1.txt").string();
 
