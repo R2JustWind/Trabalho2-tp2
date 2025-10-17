@@ -79,6 +79,8 @@ int FazBackup(const char* pdPath) {
                     }
                 } else if (pendrive_time == hd_time) {
                     result = bDoNothing;
+                } else {
+                    result = bError;
                 }
             }
         }
