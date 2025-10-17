@@ -28,7 +28,7 @@ std::string trim(const std::string& str) {
     return str.substr(first, (last - first + 1));
 }
 
-Config ReadParam(std::ifstream& param_file){
+Config ReadParam(std::ifstream& param_file) {
     Config config;
     std::string line;
     while (std::getline(param_file, line)) {
@@ -71,10 +71,23 @@ int FazBackup(const char* pendrive_path) {
                 } else {
                     result = bError; // Se a cópia falhar, marque como erro
                 }
+            } else if (fs::exists(file) && fs::exists(dest_path)) {
+                uintmax_t hd_size = fs::file_size(file);
+                uintmax_t pendrive_size = fs::file_size(dest_path);
+
+                if (hd_size > pendrive_size) {
+                    std::error_code ec;
+                    fs::copy_file(file, dest_path, fs::copy_options::overwrite_existing, ec);
+                    if (!ec) {
+                        result = bBackupToPendrive;
+                    } else {
+                        result = bError;
+                    }
+                }
             }
         }
-
     }
+
 
     //Assertiva de saída;
     assert(result >= bError && result <= bDelete);

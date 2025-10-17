@@ -15,6 +15,10 @@
 #define bBackupToHD 2
 #define bDelete 3
 
+std::string trim(const std::string& str);
+
+Config ReadParam(std::ifstream& param_file);
+
 /**
  * @brief Executa a lógica de backup a partir de um diretório fonte e um diretório de destino.
  * 
