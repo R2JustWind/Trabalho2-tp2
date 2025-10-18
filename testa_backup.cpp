@@ -2,6 +2,7 @@
 
 /**
  * \file testa_backup.cpp
+ * @brief Cria os testes para desenvolvimento.
  */
 
 #include <string>

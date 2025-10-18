@@ -1,7 +1,8 @@
 // Copyright 2025 Arthur Soares
 
 /**
- * \file testa_backup.cpp
+ * \file backup.cpp
+ * @brief Implementação das funções utilizacas.
  */
 
 #include <filesystem>
